@@ -16,6 +16,13 @@ from PIL import ImageEnhance
 from requests import session, post, adapters
 adapters.DEFAULT_RETRIES = 5
 
+def base64_api(uname, pwd, img, typeid):
+    base64_data = base64.b64encode(img)
+    b64 = base64_data.decode()
+    data = {"username": uname, "password": pwd, "typeid": typeid, "image": b64}
+    result = json.loads(requests.post("http://api.ttshitu.com/predict", json=data).text)
+    return result
+
 class Fudan:
     """
     建立与复旦服务器的会话，执行登录/登出操作
@@ -185,12 +192,18 @@ class Zlapp(Fudan):
     
 
     def validate_code(self):
-        print(self.url_code)
-        print(type(self.session.get(self.url_code)))
-        print(self.session.get(self.url_code))
+        # ============== 设置 ============== #
+        uname = 'tww'
+        pwd = 'TW9279991'
         img = self.session.get(self.url_code).content
+        typeid = 3
         
-        return self.read_captcha(img)
+        result = base64_api(uname, pwd, img, typeid)
+        if result['success']:
+            return result["data"]["result"]
+        else:
+            return result["message"]
+        return ""
 
     def checkin(self):
         """
