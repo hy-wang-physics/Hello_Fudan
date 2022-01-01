@@ -245,6 +245,7 @@ def get_account():
     psw = getenv("PASSWORD")
     shibie_name = getenv("SHIBIE_NAME")
     shibie_psw = getenv("SHIBIE_PSW")
+    print(uid, psw, shibie_name, shibie_psw)
     if uid != None and psw != None and shibie_name != None and shibie_psw != None:
         print("从环境变量中获取了用户名和密码！")
         return uid, psw, shibie_name, shibie_psw
