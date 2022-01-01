@@ -165,6 +165,7 @@ class Zlapp(Fudan):
             self.last_info = last_info["d"]["oldInfo"]
             
     def read_captcha(self, img_byte):
+        print(type(img_byte))
         img = Image.open(io.BytesIO(img_byte)).convert('L')
         enh_bri = ImageEnhance.Brightness(img)
         new_img = enh_bri.enhance(factor=1.5)
