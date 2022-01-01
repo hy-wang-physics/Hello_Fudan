@@ -186,7 +186,9 @@ class Zlapp(Fudan):
     
 
     def validate_code(self):
+        print('aaa')
         img = self.session.get(self.url_code).content
+        print('bbb')
         return self.read_captcha(img)
 
     def checkin(self):
@@ -209,7 +211,7 @@ class Zlapp(Fudan):
         district = geo_api_info["addressComponent"].get("district", "")
         
         while(True):
-            print("◉正在识别验证码......")
+            print("◉正在识别验证码yyyy......")
             code = self.validate_code()
             print("◉验证码为:", code)
             self.last_info.update(
