@@ -32,13 +32,15 @@ class Fudan:
 
     # 初始化会话
     def __init__(self,
-                 uid, psw,
+                 uid, psw, shibie_name, shibie_psw,
                  url_login='https://uis.fudan.edu.cn/authserver/login',
                  url_code="https://zlapp.fudan.edu.cn/backend/default/code"):
         """
         初始化一个session，及登录信息
         :param uid: 学号
         :param psw: 密码
+        :param shibie_name: “快识别”账户名
+        :param shibie_psw: “快识别”密码
         :param url_login: 登录页，默认服务为空
         """
         self.session = session()
@@ -49,6 +51,8 @@ class Fudan:
 
         self.uid = uid
         self.psw = psw
+        self.shibie_name = shibie_name
+        self.shibie_psw = shibie_psw
 
     def _page_init(self):
         """
@@ -174,8 +178,8 @@ class Zlapp(Fudan):
 
     def validate_code(self):
         # ============== 设置 ============== #
-        uname = 'tww'
-        pwd = 'TW9279991'
+        uname = self.shibie_name
+        pwd = self.shibie_psw
         img = self.session.get(self.url_code).content
         typeid = 3
         
@@ -239,9 +243,11 @@ def get_account():
     """
     uid = getenv("STD_ID")
     psw = getenv("PASSWORD")
-    if uid != None and psw != None:
+    shibie_name = getenv("SHIBIE_NAME")
+    shibie_psw = getenv("SHIBIE_PSW")
+    if uid != None and psw != None and shibie_name != None and shibie_psw != None:
         print("从环境变量中获取了用户名和密码！")
-        return uid, psw
+        return uid, psw, uid_shibie, uid_psw
     print("\n\n请仔细阅读以下日志！！\n请仔细阅读以下日志！！！！\n请仔细阅读以下日志！！！！！！\n\n")
     if os_path.exists("account.txt"):
         print("读取账号中……")
@@ -263,14 +269,11 @@ def get_account():
             new.write(tmp)
         print("账号已保存在目录下account.txt，请注意文件安全，不要放在明显位置\n\n建议拉个快捷方式到桌面")
 
-    return uid, psw
+    return uid, psw, shibie_name, shibie_psw
 
 
 if __name__ == '__main__':
-    uid, psw = get_account()
-    print(uid)
-    print(psw)
-    return
+    uid, psw, shibie_name, shibie_psw = get_account()
     # print(uid, psw)
     zlapp_login = 'https://uis.fudan.edu.cn/authserver/login?' \
                   'service=https://zlapp.fudan.edu.cn/site/ncov/fudanDaily'
