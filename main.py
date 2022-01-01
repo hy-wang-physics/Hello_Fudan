@@ -247,7 +247,7 @@ def get_account():
     shibie_psw = getenv("SHIBIE_PSW")
     if uid != None and psw != None and shibie_name != None and shibie_psw != None:
         print("从环境变量中获取了用户名和密码！")
-        return uid, psw, uid_shibie, uid_psw
+        return uid, psw, shibie_name, shibie_psw
     print("\n\n请仔细阅读以下日志！！\n请仔细阅读以下日志！！！！\n请仔细阅读以下日志！！！！！！\n\n")
     if os_path.exists("account.txt"):
         print("读取账号中……")
