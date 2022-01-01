@@ -185,7 +185,11 @@ class Zlapp(Fudan):
     
 
     def validate_code(self):
+        print(self.url_code)
+        print(type(self.session.get(self.url_code)))
+        print(self.session.get(self.url_code))
         img = self.session.get(self.url_code).content
+        
         return self.read_captcha(img)
 
     def checkin(self):
