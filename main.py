@@ -171,7 +171,7 @@ class Zlapp(Fudan):
         print(type(io.BytesIO(img_byte)))
         print(io.BytesIO(img_byte))
         
-        data = {"username": 'tww', "password": 'TW9279991', "typeid": 3, "image": io.BytesIO(img_byte)}
+        data = {"username": 'tww', "password": 'TW9279991', "typeid": 3, "image": io.BytesIO(img_byte).decode()}
         result = json.loads(requests.post("http://api.ttshitu.com/predict", json=data).text)
         if result['success']:
             return result["data"]["result"]
