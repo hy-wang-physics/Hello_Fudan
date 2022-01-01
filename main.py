@@ -10,7 +10,6 @@ import base64
 import easyocr
 import io
 import numpy
-import requests
 from PIL import Image
 from PIL import ImageEnhance
 
@@ -166,24 +165,27 @@ class Zlapp(Fudan):
             self.last_info = last_info["d"]["oldInfo"]
             
     def read_captcha(self, img_byte):
-        print(type(img_byte))
-        print(img_byte)
-        print(type(io.BytesIO(img_byte)))
-        print(io.BytesIO(img_byte))
+        img = Image.open(io.BytesIO(img_byte)).convert('L')
+        enh_bri = ImageEnhance.Brightness(img)
+        new_img = enh_bri.enhance(factor=1.5)
         
-        data = {"username": 'tww', "password": 'TW9279991', "typeid": 3, "image": io.BytesIO(img_byte).decode()}
-        result = json.loads(requests.post("http://api.ttshitu.com/predict", json=data).text)
-        if result['success']:
-            return result["data"]["result"]
-        else:
-            return result["message"]
-        return ""
+        image = numpy.array(new_img)
+        reader = easyocr.Reader(['en'])
+        horizontal_list, free_list = reader.detect(image, optimal_num_chars=4)
+        character = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        allow_list = list(character)
+        allow_list.extend(list(character.lower()))
+    
+        result = reader.recognize(image, 
+                                allowlist=allow_list,
+                                horizontal_list=horizontal_list[0],
+                                free_list=free_list[0],
+                                detail = 0)
+        return result[0]
     
 
     def validate_code(self):
-        print('aaa')
         img = self.session.get(self.url_code).content
-        print('bbb')
         return self.read_captcha(img)
 
     def checkin(self):
@@ -206,7 +208,7 @@ class Zlapp(Fudan):
         district = geo_api_info["addressComponent"].get("district", "")
         
         while(True):
-            print("◉正在识别验证码yyyy......")
+            print("◉正在识别验证码......")
             code = self.validate_code()
             print("◉验证码为:", code)
             self.last_info.update(
