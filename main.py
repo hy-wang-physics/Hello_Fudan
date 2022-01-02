@@ -278,7 +278,7 @@ if __name__ == '__main__':
     zlapp_login = 'https://uis.fudan.edu.cn/authserver/login?' \
                   'service=https://zlapp.fudan.edu.cn/site/ncov/fudanDaily'
     code_url = "https://zlapp.fudan.edu.cn/backend/default/code"
-    daily_fudan = Zlapp(uid, psw,
+    daily_fudan = Zlapp(uid, psw, shibie_name, shibie_psw,
                         url_login=zlapp_login, url_code=code_url)
     daily_fudan.login()
 
