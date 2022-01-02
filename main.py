@@ -4,7 +4,6 @@ import os
 from json import loads as json_loads
 from os import path as os_path, getenv
 from sys import exit as sys_exit
-from sys import argv as sys_argv
 from getpass import getpass
 import re
 import base64
@@ -241,7 +240,6 @@ def get_account():
     """
     获取账号信息
     """
-    print(sys_argv)
     uid = getenv("STD_ID")
     psw = getenv("PASSWORD")
     shibie_name = getenv("SHIBIE_NAME")
